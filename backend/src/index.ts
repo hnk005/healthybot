@@ -31,7 +31,7 @@ app.use(session({ secret: "cats" }));
 app.use(errorMiddleware);
 
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI + process.env.NAME_DB)
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Đã kết nối Database thành công'))
     .catch((err) => console.error('Lỗi kết nối Database:', err));
 

@@ -48,8 +48,11 @@ Tạo file `.env` trong thư mục `backend` và thêm các thông tin sau:
 
 ```
 PORT=4000
-MONGO_URI=mongodb://localhost:27017/healthybot
-JWT_SECRET=your_secret_key
+MONGODB_URI=mongodb://127.0.0.1:27017/healthybot
+ACCESS_TOKEN_SECRET=your_secret_key
+REFRESH_TOKEN_SECRET=your_secret_key
+EMAIL_USER=your_email
+EMAIL_PASS=your_pass
 ```
 
 ### 3. Chạy dự án
@@ -73,7 +76,7 @@ Dự án sẽ chạy tại `http://localhost:3000` cho frontend và `http://loca
 ## 🛠 Công cụ & thư viện
 
 - **Frontend:** React
-- **Backend:** Express, JWT, Mongoose
+- **Backend:**Nodejs, Express, JWT, Mongoose
 - **Database:** MongoDB
 - **AI:** Model AI nội bộ được phát triển riêng cho HealthyBot
 
