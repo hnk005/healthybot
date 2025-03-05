@@ -1,13 +1,25 @@
 import { Request, Response, NextFunction } from "express";
-import ErrorHandler from "@/utils/error";
+import { APIError, errorHandler } from "@/utils/error";
+import { logger } from "@/utils/logger";
 
-const errorMiddleware = (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
-    console.log(err)
-    res.status(err.status).json({
-        status: "error",
-        statusCode: err.status,
-        message: err.message,
-    });
+const { isTrustedError, handleError } = errorHandler;
+
+const errorMiddleware = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!isTrustedError(err)) {
+    next(err);
+  }
+  handleError(err);
+  const httpCode = err instanceof APIError && err.httpCode;
+  if (httpCode) {
+    res.status(httpCode).json({ message: err.message });
+    return;
+  }
+  next(err);
 };
 
 export default errorMiddleware;

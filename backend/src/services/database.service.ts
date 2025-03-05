@@ -1,21 +1,22 @@
 import { redisClient } from "..";
 
-
 const databaseService = {
-  
-    getVerifyEmail: async (email: string) => {
-        return await redisClient.get(`verifyEmail:${email}`);
-    },
+  getOTPEmail: async (name: string, email: string) => {
+    return await redisClient.get(`${name}:${email}`);
+  },
 
-    saveVerifyEmail: async (email: string, id: string) => {
-        await redisClient.set(`verifyEmail:${email}`, id, {
-            EX: 5 * 60,
-        });
-    },
+  saveOTPEmail: async (
+    name: string,
+    email: string,
+    otp: string,
+    EX: number,
+  ) => {
+    await redisClient.set(`${name}:${email}`, otp, { EX });
+  },
 
-    deleteVerifyEmail: async (email: string) => {
-        await redisClient.del(`verifyEmail:${email}`);
-    },
-}
+  deleteOTPEmail: async (name: string, email: string) => {
+    await redisClient.del(`${name}:${email}`);
+  },
+};
 
 export default databaseService;

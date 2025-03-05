@@ -64,4 +64,4 @@ export const templateVerifyEmail = (link: string) => `
     </div>
 </body>
 </html>
-`
+`;

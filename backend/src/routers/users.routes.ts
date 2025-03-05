@@ -1,12 +1,11 @@
 import usersController from "@/controllers/users.controller";
-import authMiddleware from "@/middlewares/auth.middleware";
 import { Router } from "express";
 
-const userRouter = Router();
+const userRoutes = Router();
 
-const { verifyToken } = authMiddleware;
-const { getAllUser } = usersController;
+const { updateEmailVerify, changePassword } = usersController;
 
-userRouter.get('/getAllUser', verifyToken, getAllUser);
+userRoutes.put("/update/email-verify", updateEmailVerify);
+userRoutes.put("/update/password", changePassword);
 
-export default userRouter;
+export default userRoutes;
