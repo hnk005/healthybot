@@ -1,33 +1,43 @@
-import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
-import { HTTP_STATUS } from '@/contants/httpStatus';
-import jwtService from '@/services/jwt.service';
+import { Request, Response, NextFunction } from "express";
+import dotenv from "dotenv";
+
+import jwtService from "@/utils/jwt.util";
+import { HTTP_STATUS_CODE } from "@/contants/enum";
+import { APIError } from "@/utils/error";
+import { User } from "@/models";
+import { ForgotPasswordRequest, RegisterRequest } from "@/contants/request";
 
 dotenv.config();
 
 const { verifyAccessToken } = jwtService;
 
 const authMiddleware = {
-  verifyToken: async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.header('Authorization')?.split(' ')[1];
-
-    if (!token) {
-      res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Chưa đăng nhập' });
-      return;
-    }
-
+  verifyToken: async (req: Request, _: Response, next: NextFunction) => {
     try {
-      const decoded = verifyAccessToken(token);
-      if (decoded.userId) {
-        next();
+      const token = req.header("Authorization")?.split(" ")[1];
+
+      if (!token) {
+        throw new APIError(
+          "BAD_REQUEST",
+          HTTP_STATUS_CODE.UNAUTHORIZED,
+          "Chưa đăng nhập",
+        );
       }
-    } catch {
-      res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .json({ message: 'Token không hợp lệ' });
-      return;
+
+      const decoded = verifyAccessToken(token);
+      if (!decoded.userId) {
+        throw new APIError(
+          "BAD_REQUEST",
+          HTTP_STATUS_CODE.UNAUTHORIZED,
+          "Token không hợp lệ",
+        );
+      }
+
+      next();
+    } catch (error) {
+      next(error);
     }
   },
 };
-// xác thực người dùng
+
 export default authMiddleware;

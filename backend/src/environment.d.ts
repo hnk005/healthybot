@@ -3,7 +3,7 @@ declare global {
     interface ProcessEnv {
       PORT?: string;
       MONGODB_URI: string;
-      NAME_DB: string;
+      SECTION_SECRET: string;
       ACCESS_TOKEN_SECRET: string;
       REFRESH_TOKEN_SECRET: string;
       EMAIL_USER: string;
