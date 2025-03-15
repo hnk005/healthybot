@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { APIError, errorHandler } from "@/utils/error";
-import { logger } from "@/utils/logger";
 
 const { isTrustedError, handleError } = errorHandler;
 
@@ -16,7 +15,7 @@ const errorMiddleware = (
   handleError(err);
   const httpCode = err instanceof APIError && err.httpCode;
   if (httpCode) {
-    res.status(httpCode).json({ message: err.message });
+    res.status(httpCode).json({ message: err.message, error: err.cause });
     return;
   }
   next(err);

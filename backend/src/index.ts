@@ -1,56 +1,73 @@
 import process from "process";
 import express, { Express } from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import session from "express-session";
+import session, { SessionOptions } from "express-session";
 import router from "./routers";
-import { createClient } from "redis";
 import errorMiddleware from "./middlewares/error.middleware";
 import requestLogger from "./middlewares/logger.middleware";
+import { logger } from "./utils/logger";
+import { mongodb, redis } from "./config/connectDB";
 
-dotenv.config();
+class App {
+  public readonly corsOptions: CorsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true,
+  };
 
-const app: Express = express();
-const port = process.env.PORT || 5000;
-
-export const redisClient = createClient();
-
-// Middleware
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(bodyParser.json());
-app.use(requestLogger);
-app.use(cookieParser());
-app.use(express.json({ limit: "500kb" }));
-app.use(express.urlencoded({ limit: "500kb", extended: true }));
-app.use(
-  session({
+  public readonly sesstionOptions: SessionOptions = {
     secret: process.env.SECTION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
-  }),
-);
+  };
 
-// Database Connection
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Đã kết nối Database thành công"))
-  .catch((err) => console.error("Lỗi kết nối Database:", err));
+  public readonly limitRequest: string = "500kb";
+  public readonly port: string = process.env.PORT ?? "5000";
 
-redisClient
-  .connect()
-  .then(() => console.log("Đã kết nối Redis thành công"))
-  .catch((err) => console.error("Lỗi kết nối Redis:", err));
+  private express: Express = express();
+  private mongodb = mongodb;
+  private redis = redis;
 
-// Routes
-app.use("/api", router);
+  async run() {
+    try {
+      // Middleware
+      this.express.use(cors(this.corsOptions));
+      this.express.use(bodyParser.json());
+      this.express.use(requestLogger);
+      this.express.use(cookieParser());
+      this.express.use(express.json({ limit: this.limitRequest }));
+      this.express.use(
+        express.urlencoded({ limit: this.limitRequest, extended: true }),
+      );
+      this.express.use(session(this.sesstionOptions));
 
-// Error handling middleware
-app.use(errorMiddleware);
+      // Router
+      this.express.use("/api", router);
 
-app.listen(port, () => {
-  console.log(`Server đang chạy tại http://localhost:${port}`);
-});
+      // Error handling middleware
+      this.express.use(errorMiddleware);
+
+      // Database Connection
+      await this.mongodb.connect(process.env.MONGODB_URI);
+
+      await this.redis.connect();
+
+      //Listen server
+      this.express.listen(this.port, (err) => {
+        if (err) {
+          logger.error("Lỗi máy chủ cục bộ", err);
+          return;
+        }
+        logger.info(`Server đang chạy tại http://localhost:${this.port}`);
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+}
+
+const app = new App();
+
+app.run().catch((err) => logger.error(err));

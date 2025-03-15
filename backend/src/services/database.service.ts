@@ -1,21 +1,16 @@
-import { redisClient } from "..";
+import { redis } from "@/config/connectDB";
 
 const databaseService = {
-  getOTPEmail: async (name: string, email: string) => {
-    return await redisClient.get(`${name}:${email}`);
+  getRedis: async (key: string) => {
+    return await redis.get(key);
   },
 
-  saveOTPEmail: async (
-    name: string,
-    email: string,
-    otp: string,
-    EX: number,
-  ) => {
-    await redisClient.set(`${name}:${email}`, otp, { EX });
+  saveRedis: async (key: string, value: string, EX: number) => {
+    await redis.set(key, value, { EX });
   },
 
-  deleteOTPEmail: async (name: string, email: string) => {
-    await redisClient.del(`${name}:${email}`);
+  deleteRedis: async (key: string) => {
+    await redis.del(key);
   },
 };
 

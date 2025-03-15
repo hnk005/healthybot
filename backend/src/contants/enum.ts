@@ -26,3 +26,8 @@ export enum HTTP_STATUS_CODE {
   SERVICE_UNAVAILABLE = 503, // Máy chủ tạm thời không khả dụng (quá tải, bảo trì)
   GATEWAY_TIMEOUT = 504, // Máy chủ trung gian không nhận phản hồi kịp thời từ máy chủ gốc
 }
+
+export enum TASK {
+  verifyEmail = "verifyEmail",
+  forgotPassword = "forgotPassword",
+}

@@ -1,4 +1,5 @@
-import e, { Request } from "express";
+import { Request } from "express";
+import { UserInterface } from "./interface";
 
 export interface RegisterRequest extends Request {
   body: {
@@ -11,12 +12,13 @@ export interface LogginRequest extends Request {
   body: {
     email: string;
     password: string;
+    user?: UserInterface;
   };
 }
 
 export interface RefreshTokenRequest extends Request {
   cookies: {
-    refreshToken?: string;
+    refreshToken: string;
   };
 }
 
@@ -32,7 +34,7 @@ export interface VerifyEmailRequest extends Request {
   };
 }
 
-export interface VerifyOTPEmailRequest extends Request {
+export interface ValidateRequest extends Request {
   body: {
     email: string;
     otp: string;
@@ -41,7 +43,6 @@ export interface VerifyOTPEmailRequest extends Request {
 
 export interface ChangePasswordRequest extends Request {
   body: {
-    email: string;
     newPassword: string;
   };
 }

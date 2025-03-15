@@ -3,9 +3,10 @@ import asyncMiddleware from "@/middlewares/async.middleware";
 
 const sendRoutes = express.Router();
 
-const { sendOTP } = asyncMiddleware;
+const { sendOTPVerifyEmail, sendOTPForgotPassword } = asyncMiddleware;
 
 //public
-sendRoutes.post("/email-otp", sendOTP);
+sendRoutes.post("/verify-email-otp", sendOTPVerifyEmail);
+sendRoutes.post("/forgot-password-otp", sendOTPForgotPassword);
 
 export default sendRoutes;

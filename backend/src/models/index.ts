@@ -1,5 +1,5 @@
-import { UserInterface } from '@/contants/interface';
-import UserSchema from './schema/UserSchema';
-import mongoose from 'mongoose';
+import { UserInterface } from "@/contants/interface";
+import UserSchema from "./schema/User";
+import { mongodb } from "@/config/connectDB";
 
-export const User = mongoose.model<UserInterface>('User', UserSchema);
+export const User = mongodb.model<UserInterface>("User", UserSchema);
