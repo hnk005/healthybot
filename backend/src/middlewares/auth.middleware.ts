@@ -1,13 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
-
 import jwtService from "@/utils/jwt.util";
 import { HTTP_STATUS_CODE } from "@/contants/enum";
 import { APIError } from "@/utils/error";
-import { User } from "@/models";
-import { ForgotPasswordRequest, RegisterRequest } from "@/contants/request";
-
-dotenv.config();
 
 const { verifyAccessToken } = jwtService;
 

@@ -1,5 +1,5 @@
+import { TASK } from "@/contants/enum";
 import emailService from "@/services/email.service";
-import { logger } from "@/utils/logger";
 import Queue from "bee-queue";
 
 const { sendOTP } = emailService;
@@ -30,7 +30,6 @@ class BaseWorker extends Queue {
 
     return new Promise((rs, rj) => {
       job.on("succeeded", (result) => {
-        logger.info(`Job for ${data.email} succeeded`);
         rs(result);
       });
 
@@ -46,8 +45,8 @@ class BaseWorker extends Queue {
 }
 
 class SendWorker extends BaseWorker {
-  constructor(name: string) {
-    super(name);
+  constructor(task: string) {
+    super(task);
   }
 
   init() {
@@ -62,9 +61,9 @@ class SendWorker extends BaseWorker {
   }
 }
 
-const verifyEmail = new SendWorker("verify-email");
+const verifyEmail = new SendWorker(TASK.verifyEmail);
+const forgotPassword = new SendWorker(TASK.forgotPassword);
 verifyEmail.init();
-const forgotPassword = new SendWorker("forgot-password");
 forgotPassword.init();
 
 export { verifyEmail, forgotPassword };

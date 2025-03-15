@@ -1,5 +1,6 @@
 import { HTTP_STATUS_CODE } from "@/contants/enum";
 import { logger } from "./logger";
+import { ValidationError } from "express-validator";
 
 class BaseError extends Error {
   public readonly name: string;
@@ -10,6 +11,7 @@ class BaseError extends Error {
     name: string,
     httpCode: HTTP_STATUS_CODE,
     description: string,
+    cause: ValidationError[],
     isOperational: boolean,
   ) {
     super(description);
@@ -18,6 +20,7 @@ class BaseError extends Error {
     this.name = name;
     this.httpCode = httpCode;
     this.isOperational = isOperational;
+    this.cause = cause;
 
     Error.captureStackTrace(this);
   }
@@ -28,9 +31,10 @@ export class APIError extends BaseError {
     name = "",
     httpCode = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
     description = "Lỗi máy chủ nội bộ",
+    cause: ValidationError[] = [],
     isOperational = true,
   ) {
-    super(name, httpCode, description, isOperational);
+    super(name, httpCode, description, cause, isOperational);
   }
 }
 
