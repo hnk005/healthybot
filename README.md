@@ -84,18 +84,18 @@ Dự án sẽ chạy tại `http://localhost:3000` cho frontend và `http://loca
 
 Mỗi thành viên có thể cập nhật hồ sơ cá nhân của mình trên GitHub để giúp nhóm dễ dàng liên lạc và theo dõi công việc.
 
-| Thành viên                                                          | Vai trò                                                | GitHub                                             |
-| ------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
-| ![Team Lead](https://github.com/hnk005.png?size=100)                | Quản lý dự án, theo dõi tiến độ và giải quyết vấn đề   | [@profile](https://github.com/hnk005)              |
-| ![Frontend Dev](https://github.com/TheL1234.png?size=100)           | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/TheL1234)            |
-| ![Frontend Dev](https://github.com/TheTai132.png?size=100)          | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/TheTai132)           |
-| ![Frontend Dev](https://github.com/ntnghiazz.png?size=100)          | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/ntnghiazz)           |
-| ![Backend Dev](https://github.com/hnk005.png?size=100)              | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/hnk005)              |
-| ![Backend Dev](https://github.com/LetIvanCook.png?size=100)         | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/LetIvanCook)         |
-| ![Backend Dev](https://github.com/backend-dev-profile.png?size=100) | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/user)                |
-| ![AI Engineer](https://github.com/hnk005.png?size=100)              | Phát triển và tích hợp model AI nội bộ                 | [@profile](https://github.com/ai-engineer-profile) |
-| ![Database Admin](https://github.com/hnk005.png?size=100)           | Quản lý, tối ưu hóa MongoDB và đảm bảo dữ liệu an toàn | [@profile](https://github.com/hnk005)              |
-| ![Test](https://github.com/hphuc116275.png?size=100)                | Kiểm thử và đảm bảo chất lượng sản phẩm                | [@profile](https://github.com/hphuc116275)         |
+| Thành viên                                                  | Vai trò                                                | GitHub                                             |
+| ----------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| ![Team Lead](https://github.com/hnk005.png?size=100)        | Quản lý dự án, theo dõi tiến độ và giải quyết vấn đề   | [@profile](https://github.com/hnk005)              |
+| ![Frontend Dev](https://github.com/TheL1234.png?size=100)   | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/TheL1234)            |
+| ![Frontend Dev](https://github.com/TheTai132.png?size=100)  | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/TheTai132)           |
+| ![Frontend Dev](https://github.com/ntnghiazz.png?size=100)  | Phát triển giao diện người dùng bằng React             | [@profile](https://github.com/ntnghiazz)           |
+| ![Backend Dev](https://github.com/hnk005.png?size=100)      | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/hnk005)              |
+| ![Backend Dev](https://github.com/LetIvanCook.png?size=100) | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/LetIvanCook)         |
+| ![Backend Dev](https://github.com/Huyn005.png?size=100)     | Xây dựng API và xử lý logic server bằng NodeJS         | [@profile](https://github.com/Huyn005)             |
+| ![AI Engineer](https://github.com/hnk005.png?size=100)      | Phát triển và tích hợp model AI nội bộ                 | [@profile](https://github.com/ai-engineer-profile) |
+| ![Database Admin](https://github.com/hnk005.png?size=100)   | Quản lý, tối ưu hóa MongoDB và đảm bảo dữ liệu an toàn | [@profile](https://github.com/hnk005)              |
+| ![Test](https://github.com/hphuc116275.png?size=100)        | Kiểm thử và đảm bảo chất lượng sản phẩm                | [@profile](https://github.com/hphuc116275)         |
 
 ## 📝 Đóng góp
 
