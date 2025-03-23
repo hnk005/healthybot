@@ -7,22 +7,30 @@ import { validationResult } from "express-validator";
 
 const { compareUserId, changePassword } = userService;
 
-const usersController = {
-  updateEmailVerify: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+const userController = {
+  getInfo: async (req: Request, res: Response) => {
+    res.status(HTTP_STATUS_CODE.OK).json({ message: "Thông tin người dùng" });
+  },
+  updateVerify: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId: string = req.cookies[TASK.verifyEmail] ?? "";
 
       await compareUserId(userId);
 
-      res.clearCookie(TASK.verifyEmail);
+      res.clearCookie(TASK.verifyEmail, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
       res
         .status(HTTP_STATUS_CODE.OK)
-        .json({ message: "Xác nhân email thành công, Bạn có thể đăng nhập" });
+        .json({ message: "Xác nhận Email thành công, bạn có thể đăng nhập" });
     } catch (error) {
+      res.clearCookie(TASK.verifyEmail, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
       next(error);
     }
   },
@@ -48,14 +56,23 @@ const usersController = {
 
       await changePassword(userId, newPassword);
 
-      res.clearCookie(TASK.forgotPassword);
+      res.clearCookie(TASK.forgotPassword, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
       res
         .status(HTTP_STATUS_CODE.OK)
         .json({ message: "Thay đổi mật khẩu thành công" });
     } catch (error) {
+      res.clearCookie(TASK.forgotPassword, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
       next(error);
     }
   },
 };
 
-export default usersController;
+export default userController;

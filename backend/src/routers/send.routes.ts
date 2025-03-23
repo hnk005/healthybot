@@ -6,7 +6,7 @@ const sendRoutes = express.Router();
 const { sendOTPVerifyEmail, sendOTPForgotPassword } = asyncMiddleware;
 
 //public
-sendRoutes.post("/verify-email-otp", sendOTPVerifyEmail);
-sendRoutes.post("/forgot-password-otp", sendOTPForgotPassword);
+sendRoutes.post("/verify-email", sendOTPVerifyEmail);
+sendRoutes.post("/forgot-password", sendOTPForgotPassword);
 
 export default sendRoutes;

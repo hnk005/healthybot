@@ -1,3 +1,4 @@
+import { HTTP_STATUS_CODE } from "@/contants/enum";
 import { RegisterRequest } from "@/contants/request";
 import databaseService from "@/services/database.service";
 import * as sendWorker from "@/worker/send.worker";
@@ -19,6 +20,7 @@ const asyncMiddleware = {
       const otp: string = await verifyEmail.sendOTPEmail({ email });
       const key = `${verifyEmail.name}:${email}`;
       await saveRedis(key, otp, timeExisOTP);
+      res.status(HTTP_STATUS_CODE.OK).json();
     } catch (err) {
       next(err);
     }
@@ -35,6 +37,7 @@ const asyncMiddleware = {
       const otp: string = await forgotPassword.sendOTPEmail({ email });
       const key = `${forgotPassword.name}:${email}`;
       await saveRedis(key, otp, timeExisOTP);
+      res.status(HTTP_STATUS_CODE.OK).json();
     } catch (err) {
       next(err);
     }

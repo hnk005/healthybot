@@ -30,12 +30,7 @@ authRouter.post(
 );
 
 //private
-authRouter.post(
-  "/refresh-token",
-  verifyToken,
-  checkSchema(refreshCheckSchema),
-  refresh,
-);
-authRouter.delete("/logout", verifyToken, logout);
+authRouter.post("/refresh-token", checkSchema(refreshCheckSchema), refresh);
+authRouter.delete("/logout", logout);
 
 export default authRouter;

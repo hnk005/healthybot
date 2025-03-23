@@ -1,21 +1,25 @@
 import { HTTP_STATUS_CODE } from "@/contants/enum";
 import { APIError } from "@/utils/error";
 import jwtUtils from "@/utils/jwt.util";
-const { generateAccessToken, verifyRefreshToken } = jwtUtils;
+const { generateToken, verifyToken } = jwtUtils;
 
 const authService = {
   createNewAccessToken: async (refreshToken: string) => {
-    const decode = verifyRefreshToken(refreshToken);
+    const decode = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-    if (!decode.userId) {
+    if (!decode) {
       throw new APIError(
-        "BAD_REQUEST",
-        HTTP_STATUS_CODE.BAD_REQUEST,
+        "UNAUTHORIZED",
+        HTTP_STATUS_CODE.UNAUTHORIZED,
         "Token không hợp lệ hoặc đã hết hạn",
       );
     }
 
-    return generateAccessToken(decode.userId);
+    return generateToken(
+      decode.userId,
+      process.env.ACCESS_TOKEN_SECRET,
+      process.env.EXISTS_ACCESS_TOKEN,
+    );
   },
 };
 

@@ -22,6 +22,12 @@ export interface RefreshTokenRequest extends Request {
   };
 }
 
+export interface AuthUserRequest extends Request {
+  cookies: {
+    accessToken: string;
+  };
+}
+
 export interface ForgotPasswordRequest extends Request {
   body: {
     email: string;
