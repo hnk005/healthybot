@@ -1,14 +1,21 @@
 import jwt from "jsonwebtoken";
 
 const jwtUtil = {
-  generateAccessToken: (userId: string) =>
-    jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" }),
-  generateRefreshToken: (userId: string) =>
-    jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" }),
-  verifyAccessToken: (token: string) =>
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as { userId: string },
-  verifyRefreshToken: (token: string) =>
-    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET) as { userId: string },
+  generateToken: (userId: string, secret: string, expiresIn: any) =>
+    jwt.sign({ userId }, secret, { expiresIn: expiresIn }),
+  verifyToken: (token: string, secret: string): { userId: string } | null => {
+    try {
+      return jwt.verify(token, secret) as {
+        userId: string;
+      };
+    } catch (error) {
+      const err = error as Error;
+      if (err.name === "TokenExpiredError") {
+        return null;
+      }
+      return null;
+    }
+  },
 };
 
 export default jwtUtil;

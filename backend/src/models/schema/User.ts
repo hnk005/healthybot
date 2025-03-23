@@ -7,8 +7,7 @@ export const UserSchema: Schema<UserInterface> = new Schema(
   {
     email: {
       type: String,
-      required: [true, "can't be blank"],
-      match: [/\S+@\S+\.\S+/, "is invalid"],
+      required: true,
       index: true,
     },
     password: {

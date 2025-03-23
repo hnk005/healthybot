@@ -1,15 +1,18 @@
-import usersController from "@/controllers/users.controller";
+import userController from "@/controllers/user.controller";
+import authMiddleware from "@/middlewares/auth.middleware";
 import resetPasswordCheckSchema from "@/validation/schema/resetPasswordCheckSchema";
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 
 const userRoutes = Router();
 
-const { updateEmailVerify, resetPassword } = usersController;
+const { getInfo, updateVerify, resetPassword } = userController;
+const { verifyToken } = authMiddleware;
 
-userRoutes.put("/update/email-verify", updateEmailVerify);
+userRoutes.get("/info", verifyToken, getInfo);
+userRoutes.put("/update/verify", updateVerify);
 userRoutes.put(
-  "/update/reset-password",
+  "/update/password",
   checkSchema(resetPasswordCheckSchema),
   resetPassword,
 );

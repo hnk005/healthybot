@@ -6,6 +6,33 @@ import { User } from "@/models";
 const { getRedis, deleteRedis } = databaseService;
 
 const validateService = {
+  compareEmailAndPassword: async (email: string, password: string) => {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw new APIError(
+        "BAD_REQUEST",
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "Email không tồn tại",
+      );
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      throw new APIError(
+        "BAD_REQUEST",
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "Mật khẩu không chính sác",
+      );
+    }
+
+    if (!user.isVerified) {
+      return "";
+    }
+
+    return user.id;
+  },
   compareOtp: async (task: string, email: string, otp: string) => {
     const key = `${task}:${email}`;
 

@@ -39,7 +39,7 @@ const DialogCommon = ({
           leaveFrom='scale-100 opacity-100'
           leaveTo='scale-90 opacity-0'
         >
-          <Dialog.Panel className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full z-[9999]'>
+          <Dialog.Panel className='z-[9999]' autoFocus>
             {children}
           </Dialog.Panel>
         </Transition.Child>

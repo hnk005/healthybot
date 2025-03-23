@@ -10,10 +10,12 @@ import { APIError } from "@/utils/error";
 import { validationResult } from "express-validator";
 import authService from "@/services/auth.service";
 import userService from "@/services/user.service";
+import validateService from "@/services/validate.service";
 
-const { generateAccessToken, generateRefreshToken } = jwtUtils;
+const { generateToken } = jwtUtils;
 const { createNewAccessToken } = authService;
-const { createUser } = userService;
+const { compareEmailAndPassword } = validateService;
+const { createUser, sameEmail, existsEmail } = userService;
 
 const authController = {
   register: async (req: RegisterRequest, res: Response, next: NextFunction) => {
@@ -31,11 +33,13 @@ const authController = {
 
       const { email, password } = req.body;
 
+      await sameEmail(email);
       await createUser(email, password);
 
-      res
-        .status(HTTP_STATUS_CODE.CREATED)
-        .json({ message: "Đăng ký thành công" });
+      res.status(HTTP_STATUS_CODE.CREATED).json({
+        message:
+          "Đăng ký thành công, vui lòng nhập mã OTP để xác nhận tài khoản",
+      });
 
       next();
     } catch (error) {
@@ -55,22 +59,44 @@ const authController = {
         );
       }
 
-      const { user } = req.body;
+      const { email, password } = req.body;
 
-      if (!user) throw new APIError();
+      const userId: string = await compareEmailAndPassword(email, password);
 
-      const accessToken = generateAccessToken(user._id as string);
-      const refreshToken = generateRefreshToken(user._id as string);
+      if (!userId) {
+        throw new APIError(
+          "UNAUTHORIZED",
+          HTTP_STATUS_CODE.UNAUTHORIZED,
+          "Đăng nhập không thành công",
+        );
+      }
+
+      const accessToken = generateToken(
+        userId,
+        process.env.ACCESS_TOKEN_SECRET,
+        process.env.EXISTS_ACCESS_TOKEN,
+      );
+      const refreshToken = generateToken(
+        userId,
+        process.env.REFRESH_TOKEN_SECRET,
+        process.env.EXISTS_REFRESH_TOKEN,
+      );
 
       if (accessToken && refreshToken) {
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "strict",
+        });
+
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           secure: false,
-          sameSite: true,
+          sameSite: "strict",
         });
+
         res.status(HTTP_STATUS_CODE.OK).json({
           message: "Đăng nhập thành công",
-          data: { token: accessToken },
         });
         return;
       }
@@ -106,16 +132,28 @@ const authController = {
 
       const newAccessToken = await createNewAccessToken(refreshToken);
 
-      res.status(HTTP_STATUS_CODE.OK).json({ token: newAccessToken });
+      res.cookie("accessToken", newAccessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json({ message: "Refesh token" });
     } catch (error) {
       next(error);
     }
   },
-  logout: async (req: Request, res: Response, next: NextFunction) => {
+  logout: async (_: Request, res: Response, next: NextFunction) => {
     try {
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
+
       res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "strict",
       });
 
@@ -137,7 +175,13 @@ const authController = {
         );
       }
 
-      res.status(HTTP_STATUS_CODE.OK).json();
+      const { email } = req.body;
+
+      await existsEmail(email);
+
+      res
+        .status(HTTP_STATUS_CODE.OK)
+        .json({ message: "Vui lòng xác nhận OTP để tiếp tục" });
       next();
     } catch (error) {
       next(error);

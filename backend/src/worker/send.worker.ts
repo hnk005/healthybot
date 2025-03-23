@@ -25,8 +25,8 @@ class BaseWorker extends Queue {
     });
   }
 
-  async createJobAndHandleEvents(data: any, jobData: any): Promise<string> {
-    const job = await this.createJob(jobData).timeout(5000).retries(3).save();
+  async createJobAndHandleEvents(jobData: any): Promise<string> {
+    const job = await this.createJob(jobData).timeout(5000).save();
 
     return new Promise((rs, rj) => {
       job.on("succeeded", (result) => {
@@ -57,7 +57,7 @@ class SendWorker extends BaseWorker {
   }
 
   async sendOTPEmail(data: { email: string }): Promise<string> {
-    return this.createJobAndHandleEvents(data, { email: data.email });
+    return this.createJobAndHandleEvents(data);
   }
 }
 

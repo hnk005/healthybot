@@ -6,6 +6,27 @@ import { User } from "@/models";
 const { getRedis } = databaseService;
 
 const userService = {
+  existsEmail: async (email: string) => {
+    const user = await User.findOne({ email, isVerified: true });
+
+    if (!user) {
+      throw new APIError(
+        "BAD_REQUEST",
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "Email không tồn tại hoặc chưa được xác nhận",
+      );
+    }
+  },
+  sameEmail: async (email: string) => {
+    const user = await User.findOne({ email });
+    if (user) {
+      throw new APIError(
+        "BAD_REQUEST",
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "Email đã tồn tại",
+      );
+    }
+  },
   createUser: async (email: string, password: string) => {
     const newUser = new User({
       email,
@@ -17,7 +38,7 @@ const userService = {
   compareUserId: async (userId: string) => {
     const storedUserId = await getRedis(TASK.verifyEmail);
 
-    if (!storedUserId || JSON.parse(storedUserId) !== userId) {
+    if (!storedUserId || !userId || storedUserId !== userId) {
       throw new APIError(
         "BAD_REQUEST",
         HTTP_STATUS_CODE.BAD_REQUEST,
@@ -28,9 +49,9 @@ const userService = {
     await User.findOneAndUpdate({ _id: userId }, { isVerified: true });
   },
   changePassword: async (userId: string, newPassword: string) => {
-    const storedUserId = await getRedis(TASK.verifyEmail);
+    const storedUserId = await getRedis(TASK.forgotPassword);
 
-    if (!storedUserId || JSON.parse(storedUserId) !== userId) {
+    if (!storedUserId || !userId || storedUserId !== userId) {
       throw new APIError(
         "BAD_REQUEST",
         HTTP_STATUS_CODE.BAD_REQUEST,
