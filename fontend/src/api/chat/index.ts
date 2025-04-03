@@ -2,7 +2,7 @@ import { transformStream } from "@/handler/chatStream";
 import axios from "axios";
 
 const CHAT = axios.create({
-  baseURL: "http://192.168.1.23:5000",
+  baseURL: "https://6f0f-2402-800-631c-a854-ba23-4a49-e441-6c5.ngrok-free.app",
 });
 
 export const chatWithAIStream = async (

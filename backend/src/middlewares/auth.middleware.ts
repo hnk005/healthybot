@@ -13,6 +13,7 @@ const authMiddleware = {
     next: NextFunction,
   ) => {
     try {
+      console.log(req.cookies);
       const accessToken = req.cookies.accessToken;
       if (!accessToken) {
         throw new APIError(
