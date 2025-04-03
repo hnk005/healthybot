@@ -1,6 +1,16 @@
 import DialogCommon from "@/components/common/DialogCommon";
 
-const DeleteDialog = ({ isOpen, onClose, onDelete }) => {
+interface DeleleDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+}
+
+const DeleteDialog: React.FC<DeleleDialogProps> = ({
+  isOpen,
+  onClose,
+  onDelete,
+}) => {
   return (
     <DialogCommon open={isOpen} onClose={onClose}>
       <div className='bg-gray-400 p-10 rounded-lg'>

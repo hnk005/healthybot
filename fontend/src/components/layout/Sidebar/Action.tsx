@@ -1,8 +1,13 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVertical, Trash, Pencil } from "lucide-react";
 
-const Action = ({ onDelete, onChange }) => {
+interface ActionProps {
+  onDelete: () => void;
+  onChange: () => void;
+}
+
+const Action: React.FC<ActionProps> = ({ onDelete, onChange }) => {
   return (
     <Menu as='div' className='relative text-right'>
       <Menu.Button className='p-1 rounded-full flex items-center justify-center'>

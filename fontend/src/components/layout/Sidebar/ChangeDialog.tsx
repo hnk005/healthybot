@@ -1,7 +1,19 @@
 import DialogCommon from "@/components/common/DialogCommon";
 import { useEffect, useState } from "react";
 
-const ChangeDialog = ({ isOpen, onClose, onChange, title }) => {
+interface ChangeDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onChange: (newTitle: string) => void;
+  title: string;
+}
+
+const ChangeDialog: React.FC<ChangeDialogProps> = ({
+  isOpen,
+  onClose,
+  onChange,
+  title,
+}) => {
   const [newTitle, setNewTitle] = useState("");
 
   useEffect(() => {

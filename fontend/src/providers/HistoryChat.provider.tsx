@@ -7,7 +7,6 @@ import {
   getHistoryChat,
 } from "@/api/chat/history";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from "react-toastify";
 
 interface ChatHistoryItem {
   _id: string;
@@ -37,7 +36,7 @@ export const HistoryChatProvider = ({
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string>("");
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["chatHistory"],
     queryFn: async () => await getHistoryChat(100),
     enabled: isUser,
@@ -67,7 +66,7 @@ export const HistoryChatProvider = ({
       await changeTitle(chatId, newTitle);
       await refetch();
     } catch (error) {
-      toast.error(error);
+      console.error(error);
     }
   };
 
@@ -76,7 +75,7 @@ export const HistoryChatProvider = ({
       await deleteChat(chatId);
       await refetch();
     } catch (error) {
-      toast.error(error);
+      console.error(error);
     }
   };
 

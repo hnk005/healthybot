@@ -39,7 +39,7 @@ export const ChatBotProvider = ({
   const [loadingResAt, setLoadingResAt] = useState<boolean>(false);
   const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
-  const { isLoading, refetch } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ["listChat"],
     queryFn: async () => {
       const { data } = await getMessage(currentChatId);
@@ -54,7 +54,6 @@ export const ChatBotProvider = ({
     mutate,
     isPaused,
     isPending,
-    error: errorResAt,
   } = useMutation({
     mutationFn: async (userInput: string) => {
       setLoadingResAt(true);
