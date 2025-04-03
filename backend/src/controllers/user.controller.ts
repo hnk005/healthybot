@@ -20,7 +20,7 @@ const userController = {
       res.clearCookie(TASK.verifyEmail, {
         httpOnly: true,
         secure: false,
-        sameSite: "strict",
+        sameSite: "none",
       });
       res
         .status(HTTP_STATUS_CODE.OK)
@@ -29,7 +29,7 @@ const userController = {
       res.clearCookie(TASK.verifyEmail, {
         httpOnly: true,
         secure: false,
-        sameSite: "strict",
+        sameSite: "none",
       });
       next(error);
     }
@@ -58,8 +58,8 @@ const userController = {
 
       res.clearCookie(TASK.forgotPassword, {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
       res
         .status(HTTP_STATUS_CODE.OK)
@@ -67,8 +67,8 @@ const userController = {
     } catch (error) {
       res.clearCookie(TASK.forgotPassword, {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
       next(error);
     }

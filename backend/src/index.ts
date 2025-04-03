@@ -12,7 +12,7 @@ import { mongodb, redis } from "./config/connectDB";
 
 class App {
   public readonly corsOptions: CorsOptions = {
-    origin: "http://localhost:3000",
+    origin: ["https://hnk005.github.io", "http://localhost:3000"],
     credentials: true,
   };
 
@@ -20,7 +20,7 @@ class App {
     secret: process.env.SECTION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: true },
   };
 
   public readonly limitRequest: string = "500kb";

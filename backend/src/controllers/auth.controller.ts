@@ -85,14 +85,14 @@ const authController = {
       if (accessToken && refreshToken) {
         res.cookie("accessToken", accessToken, {
           httpOnly: true,
-          secure: false,
-          sameSite: "strict",
+          secure: true,
+          sameSite: "none",
         });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          secure: false,
-          sameSite: "strict",
+          secure: true,
+          sameSite: "none",
         });
 
         res.status(HTTP_STATUS_CODE.OK).json({
@@ -134,8 +134,8 @@ const authController = {
 
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
 
       res.status(HTTP_STATUS_CODE.OK).json({ message: "Refesh token" });
@@ -147,14 +147,14 @@ const authController = {
     try {
       res.clearCookie("accessToken", {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
 
       res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
 
       res.status(HTTP_STATUS_CODE.OK).json({ message: "Đăng xuất thành công" });

@@ -50,11 +50,7 @@ export const ChatBotProvider = ({
     retry: false,
   });
 
-  const {
-    mutate,
-    isPaused,
-    isPending,
-  } = useMutation({
+  const { mutate, isPaused, isPending } = useMutation({
     mutationFn: async (userInput: string) => {
       setLoadingResAt(true);
       cancelTokenRef.current = axios.CancelToken.source();
@@ -88,7 +84,7 @@ export const ChatBotProvider = ({
       const { user, assistant } = listChat[listChat.length - 1];
       await createSectionChat(currentChatId, user, assistant);
     } catch (error) {
-      toast.error(JSON.stringify(error));
+      console.error(error);
     }
   };
 

@@ -45,14 +45,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [showChangePassword, setShơChangePassword] = useState(false);
 
-  const { data, error, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["isUser"],
     queryFn: userInfo,
     retry: false,
   });
-  if (error) {
-    toast.error(error.message);
-  }
+
   const verifyEmailOtp = async (email: string, otp: string) => {
     await verifyEmail(email, otp);
     return await updateVerify();
