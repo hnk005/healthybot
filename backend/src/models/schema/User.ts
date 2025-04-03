@@ -1,5 +1,5 @@
 import { Schema, UpdateQuery } from "mongoose";
-import { UserInterface } from "@/contants/interface";
+import { UserInterface } from "@/contants/shema";
 import bcrypt from "bcryptjs";
 
 // Schema User

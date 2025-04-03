@@ -31,6 +31,8 @@ const authMiddleware = {
         );
       }
 
+      req.body.userId = decoded.userId;
+
       next();
     } catch (error) {
       next(error);

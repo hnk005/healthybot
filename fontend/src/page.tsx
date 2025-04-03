@@ -1,11 +1,14 @@
-import InputChat from "./components/section/InputChat";
+import Chat from "./components/section/chat-bot/Chat";
+import ChatInput from "./components/section/chat-bot/ChatInput";
+import { ChatBotProvider } from "./providers/Chat.provider";
 
 const Page = () => {
   return (
-    <div className='w-full h-full px-4 flex justify-center'>
-      <div className='min-w-[768px] max-md:min-w-full flex items-center'>
-        <InputChat></InputChat>
-      </div>
+    <div className='w-full h-full flex flex-col justify-center items-center'>
+      <ChatBotProvider>
+        <Chat />
+        <ChatInput />
+      </ChatBotProvider>
     </div>
   );
 };

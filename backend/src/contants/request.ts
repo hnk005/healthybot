@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { UserInterface } from "./interface";
+import { UserInterface } from "./shema";
 
 export interface RegisterRequest extends Request {
   body: {
@@ -25,6 +25,9 @@ export interface RefreshTokenRequest extends Request {
 export interface AuthUserRequest extends Request {
   cookies: {
     accessToken: string;
+  };
+  body: {
+    userId?: string;
   };
 }
 

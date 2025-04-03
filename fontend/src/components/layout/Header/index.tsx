@@ -6,6 +6,7 @@ import Login from "@/components/auth/Login";
 import Register from "@/components/auth/Register";
 import { useAuth } from "@/hooks/useAuth";
 import User from "./User";
+import { useHistoryChat } from "@/hooks/useChatHistory";
 
 interface HeaderProps {
   showSidebar: boolean;
@@ -13,7 +14,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ showSidebar, openSidebar }) => {
-  const { user } = useAuth();
+  const { isUser } = useAuth();
+  const { handleNewChat } = useHistoryChat();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -33,21 +35,26 @@ const Header: React.FC<HeaderProps> = ({ showSidebar, openSidebar }) => {
 
   return (
     <>
-      <div className='fixed flex w-full items-center justify-between px-2 py-3 h-16'>
+      <div className='flex w-full items-center justify-between px-2 py-3 h-16 max-lg:relative'>
         {/* Left Section */}
         <div className='flex items-center gap-2'>
           <div style={{ display: showSidebar ? "none" : "flex" }}>
-            {user && (
-              <button
-                className='p-2 rounded-full hover:bg-gray-200'
-                onClick={openSidebar}
-              >
-                <PanelLeftOpen className='w-6 h-6 text-gray-400' />
-              </button>
+            {isUser && (
+              <>
+                <button
+                  className='p-2 rounded-full hover:bg-gray-200'
+                  onClick={openSidebar}
+                >
+                  <PanelLeftOpen className='w-6 h-6 text-gray-400' />
+                </button>
+                <button
+                  className='p-2 rounded-full hover:bg-gray-200'
+                  onClick={handleNewChat}
+                >
+                  <Edit className='w-6 h-6 text-gray-400' />
+                </button>
+              </>
             )}
-            <button className='p-2 rounded-full hover:bg-gray-200'>
-              <Edit className='w-6 h-6 text-gray-400' />
-            </button>
           </div>
 
           <div className='flex items-center gap-2 px-2'>
@@ -59,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ showSidebar, openSidebar }) => {
         </div>
 
         {/* Right Section */}
-        {user ? (
+        {isUser ? (
           <User />
         ) : (
           <div className='flex items-center space-x-2'>

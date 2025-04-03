@@ -6,10 +6,10 @@ import { checkSchema } from "express-validator";
 
 const userRoutes = Router();
 
-const { getInfo, updateVerify, resetPassword } = userController;
+const { isUser, updateVerify, resetPassword } = userController;
 const { verifyToken } = authMiddleware;
 
-userRoutes.get("/info", verifyToken, getInfo);
+userRoutes.get("", verifyToken, isUser);
 userRoutes.put("/update/verify", updateVerify);
 userRoutes.put(
   "/update/password",
