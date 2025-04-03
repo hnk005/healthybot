@@ -1,0 +1,12 @@
+version: 2
+authtoken: 2vDSvssUKNl11yYQ4KL3knMm03A_6oBNZBtk3HVPiMtQSA78g
+
+tunnels:
+  first-app:
+    addr: http://localhost
+    proto: http
+    domain: enormous-ringtail-mature.ngrok-free.app
+  second-app:
+    addr: http://localhost
+    proto: http
+    domain: enormous-ringtail-mature.ngrok-free.app

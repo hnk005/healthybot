@@ -1,4 +1,4 @@
-export const API_URL = "http://localhost:4000/v1/api";
+export const API_URL = "https://server1.loca.lt/v1/api";
 
 export enum API_AUTH {
   LOGIN = "/login",
@@ -9,7 +9,7 @@ export enum API_AUTH {
 }
 
 export enum API_USER {
-  IS_USER = "/",
+  IS_USER = "/info",
   UPDATE_VERIFY = "/update/verify",
   UPDATE_PASSWORD = "/update/password",
 }

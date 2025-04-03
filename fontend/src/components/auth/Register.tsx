@@ -181,13 +181,13 @@ const Register = ({
         </div>
       </form>
 
-      <div
-        className='mt-4 text-center text-white text-sm'
-        onClick={onOpenLogin}
-      >
+      <div className='mt-4 text-center text-white text-sm'>
         <span>
           Đã có tài khoản?{" "}
-          <span className='font-semibold cursor-pointer hover:opacity-70'>
+          <span
+            className='font-semibold cursor-pointer hover:opacity-70'
+            onClick={onOpenLogin}
+          >
             Đăng nhập
           </span>
         </span>

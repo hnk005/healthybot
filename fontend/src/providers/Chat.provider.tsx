@@ -14,13 +14,15 @@ interface ChatMessage {
 
 export interface ChatContextInterface {
   prompt: string;
-  setPrompt: (value: string) => void;
   listChat: ChatMessage[];
   loadingResAt: boolean;
   isPending: boolean;
   isPaused: boolean;
+  isError: boolean;
+  error: any;
   sendMessage: (message: string) => void;
   stopChat: () => void;
+  setPrompt: (value: string) => void;
 }
 
 export const ChatContext = createContext<ChatContextInterface>(
@@ -50,32 +52,27 @@ export const ChatBotProvider = ({
     retry: false,
   });
 
-  const { mutate, isPaused, isPending } = useMutation({
+  const { mutate, isError, isPaused, error, isPending } = useMutation({
     mutationFn: async (userInput: string) => {
       setLoadingResAt(true);
       cancelTokenRef.current = axios.CancelToken.source();
       let assistant = "";
 
-      try {
-        await chatWithAIStream(
-          userInput,
-          (chunk) => {
-            setLoadingResAt(false);
-            assistant += chunk;
-            setListChat((prev) => {
-              const updatedHistory = [...prev];
-              updatedHistory[updatedHistory.length - 1].assistant = assistant;
-              return [...updatedHistory];
-            });
-          },
-          cancelTokenRef.current.token,
-        );
-      } catch (err) {
-        console.error("Request bị hủy:", err);
-      } finally {
-        setLoadingResAt(false);
-        handleChatComplete();
-      }
+      await chatWithAIStream(
+        userInput,
+        (chunk) => {
+          setLoadingResAt(false);
+          assistant += chunk;
+          setListChat((prev) => {
+            const updatedHistory = [...prev];
+            updatedHistory[updatedHistory.length - 1].assistant = assistant;
+            return [...updatedHistory];
+          });
+        },
+        cancelTokenRef.current.token,
+      );
+      setLoadingResAt(false);
+      handleChatComplete();
     },
   });
 
@@ -126,16 +123,24 @@ export const ChatBotProvider = ({
     };
   }, [currentChatId, refetch]);
 
+  useEffect(() => {
+    if (isError) {
+      setLoadingResAt(false);
+    }
+  }, [isError, error]);
+
   return (
     <ChatContext.Provider
       value={{
         prompt,
-        setPrompt,
+        isError,
+        error,
         listChat,
         loadingResAt,
         isPending,
         isPaused,
         sendMessage,
+        setPrompt,
         stopChat,
       }}
     >
