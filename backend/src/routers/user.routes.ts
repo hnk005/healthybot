@@ -9,7 +9,7 @@ const userRoutes = Router();
 const { isUser, updateVerify, resetPassword } = userController;
 const { verifyToken } = authMiddleware;
 
-userRoutes.get("", verifyToken, isUser);
+userRoutes.get("/info", verifyToken, isUser);
 userRoutes.put("/update/verify", updateVerify);
 userRoutes.put(
   "/update/password",
