@@ -2,6 +2,7 @@ import {
   createContext,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -18,7 +19,7 @@ import { sendOtpForgotPassword, sendOtpVerifyEmail } from "@/api/send";
 import ChangePassword from "@/components/auth/ChangePassword";
 
 export interface AuthContextInterface {
-  user: any;
+  isUser: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -35,6 +36,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [isUser, setIsUser] = useState(false);
   const [titleVerifyOtp, setTitleVerifyOtp] = useState("");
   const [emailVerifyOtp, setEmailVerifyOtp] = useState("");
   const [verify, setVerify] =
@@ -43,11 +45,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [showChangePassword, setShơChangePassword] = useState(false);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["userInfo"],
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["isUser"],
     queryFn: userInfo,
     retry: false,
   });
+  if (error) {
+    toast.error(error.message);
+  }
   const verifyEmailOtp = async (email: string, otp: string) => {
     await verifyEmail(email, otp);
     return await updateVerify();
@@ -93,7 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const toastId = toast.loading("Vui lòng chờ...");
       try {
         await login(email, password);
-        window.location.reload();
+        refetch();
         return true;
       } catch (error) {
         const res = error as AxiosError<{ message: string }>;
@@ -114,7 +119,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return false;
       }
     },
-    [handleShowVerifyOtp],
+    [handleShowVerifyOtp, refetch],
   );
 
   const handleRegister = useCallback(
@@ -159,7 +164,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const res = error as AxiosError<{ message: string }>;
       toast.error(res.response?.data?.message || res.message);
     }
-  }, []);
+  }, [refetch]);
 
   const handleChangePassword = useCallback(
     async (newPassword: string): Promise<void> => {
@@ -256,9 +261,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     [handleShowVerifyOtp],
   );
 
+  useEffect(() => {
+    if (data) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
+  }, [data]);
+
   const contextValue = useMemo(
     () => ({
-      user: data?.data,
+      isUser: isUser,
       login: handleLogin,
       register: handleRegister,
       logout: handleLogout,
@@ -268,7 +281,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       resendOtp: handleResendOtp,
     }),
     [
-      data,
+      isUser,
       handleLogin,
       handleRegister,
       handleLogout,

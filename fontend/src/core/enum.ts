@@ -1,4 +1,4 @@
-export const API_URL = "http://localhost:4000/api";
+export const API_URL = "http://localhost:4000/v1/api";
 
 export enum API_AUTH {
   LOGIN = "/login",
@@ -9,17 +9,26 @@ export enum API_AUTH {
 }
 
 export enum API_USER {
-  INFO = `/info`,
-  UPDATE_VERIFY = `/update/verify`,
-  UPDATE_PASSWORD = `/update/password`,
+  IS_USER = "/",
+  UPDATE_VERIFY = "/update/verify",
+  UPDATE_PASSWORD = "/update/password",
 }
 
 export enum API_VALIDATION {
-  VERIFY_EMAIL = `/verify-email`,
-  FORGOT_PASSWORD = `/forgot-password`,
+  VERIFY_EMAIL = "/verify-email",
+  FORGOT_PASSWORD = "/forgot-password",
 }
 
 export enum API_SEND {
-  VERIFY_EMAIL = `/verify-email`,
-  FORGOT_PASSWORD = `/forgot-password`,
+  VERIFY_EMAIL = "/verify-email",
+  FORGOT_PASSWORD = "/forgot-password",
+}
+
+export enum API_CHAT {
+  GET_HISTORY = "/get",
+  GET_MESSAGE = "/get/messages",
+  CREATED = "/create",
+  CREATED_SECTION = "/create/section",
+  UPDATE_TITLE = "/update/title",
+  DELETE_CHAT = "/delete",
 }

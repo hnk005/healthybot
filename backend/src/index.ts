@@ -44,7 +44,7 @@ class App {
       this.express.use(session(this.sesstionOptions));
 
       // Router
-      this.express.use("/api", router);
+      this.express.use("/v1/api", router);
 
       // Error handling middleware
       this.express.use(errorMiddleware);

@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: ReactNode }): ReactElement => {
     <>
       <div className='flex flex-row h-[100vh]'>
         <Sidebar open={showSidebar} onClose={() => setShowSidebar(false)} />
-        <div className='w-full h-full z-9999'>
+        <div className='flex flex-col w-full h-full z-9999 justify-between'>
           <Header
             showSidebar={showSidebar}
             openSidebar={() => setShowSidebar(true)}

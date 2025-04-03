@@ -8,8 +8,8 @@ import { validationResult } from "express-validator";
 const { compareUserId, changePassword } = userService;
 
 const userController = {
-  getInfo: async (req: Request, res: Response) => {
-    res.status(HTTP_STATUS_CODE.OK).json({ message: "Thông tin người dùng" });
+  isUser: async (req: Request, res: Response) => {
+    res.status(HTTP_STATUS_CODE.OK).json();
   },
   updateVerify: async (req: Request, res: Response, next: NextFunction) => {
     try {

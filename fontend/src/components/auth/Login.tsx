@@ -68,11 +68,11 @@ const Login = ({
             {showPassword ? <EyeOff /> : <Eye />}
           </button>
         </div>
-        <div
-          className='mt-2 text-right'
-          onClick={() => setForgotPassword(true)}
-        >
-          <span className='text-white font-semibold cursor-pointer text-sm hover:opacity-70'>
+        <div className='mt-2 text-right'>
+          <span
+            onClick={() => setForgotPassword(true)}
+            className='text-white font-semibold cursor-pointer text-sm hover:opacity-70'
+          >
             Quên mật khẩu?
           </span>
         </div>

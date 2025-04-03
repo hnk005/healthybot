@@ -8,7 +8,7 @@ const USER = axios.create({
 });
 
 export const userInfo = () => {
-  return USER.get(API_USER.INFO);
+  return USER.get(API_USER.IS_USER);
 };
 
 export const updateVerify = () => {
