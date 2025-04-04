@@ -37,7 +37,7 @@ const validateController = {
 
       res.cookie(task, user.id, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "none",
       });
       res.status(HTTP_STATUS_CODE.NO_CONTENT).json();
@@ -72,7 +72,7 @@ const validateController = {
 
       res.cookie(task, user.id, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "none",
       });
       res

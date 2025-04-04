@@ -1,9 +1,14 @@
 import { ReactElement, ReactNode, useState } from "react";
 import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
+import { useAuth } from "./hooks/useAuth";
+import Loading from "./components/base/Loader";
 
 const Layout = ({ children }: { children: ReactNode }): ReactElement => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const { isLoading } = useAuth();
+
+  if (isLoading) return <Loading></Loading>;
   return (
     <>
       <div className='flex flex-row h-[100vh]'>
