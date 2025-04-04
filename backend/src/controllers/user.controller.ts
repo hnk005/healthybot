@@ -19,7 +19,7 @@ const userController = {
 
       res.clearCookie(TASK.verifyEmail, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "none",
       });
       res
@@ -28,7 +28,7 @@ const userController = {
     } catch (error) {
       res.clearCookie(TASK.verifyEmail, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "none",
       });
       next(error);

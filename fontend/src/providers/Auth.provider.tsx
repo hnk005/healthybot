@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { updatePassword, updateVerify, userInfo } from "@/api/user";
-import Loading from "@/components/base/Loader";
 import DialogCommon from "@/components/common/DialogCommon";
 import ValidateOtp from "@/components/validation/ValidateOtp";
 import { verifyEmail, verifyForgotPassword } from "@/api/validation";
@@ -20,6 +19,7 @@ import ChangePassword from "@/components/auth/ChangePassword";
 
 export interface AuthContextInterface {
   isUser: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -36,7 +36,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isUser, setIsUser] = useState(false);
+  const [isUser, setIsUser] = useState(true);
   const [titleVerifyOtp, setTitleVerifyOtp] = useState("");
   const [emailVerifyOtp, setEmailVerifyOtp] = useState("");
   const [verify, setVerify] =
@@ -45,9 +45,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [showVerifyOtp, setShowVerifyOtp] = useState(false);
   const [showChangePassword, setShơChangePassword] = useState(false);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["isUser"],
     queryFn: userInfo,
+    enabled: isUser,
     retry: false,
   });
 
@@ -96,7 +97,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const toastId = toast.loading("Vui lòng chờ...");
       try {
         await login(email, password);
-        refetch();
+        window.location.reload();
         return true;
       } catch (error) {
         const res = error as AxiosError<{ message: string }>;
@@ -117,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return false;
       }
     },
-    [handleShowVerifyOtp, refetch],
+    [handleShowVerifyOtp],
   );
 
   const handleRegister = useCallback(
@@ -162,7 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const res = error as AxiosError<{ message: string }>;
       toast.error(res.response?.data?.message || res.message);
     }
-  }, [refetch]);
+  }, []);
 
   const handleChangePassword = useCallback(
     async (newPassword: string): Promise<void> => {
@@ -270,6 +271,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const contextValue = useMemo(
     () => ({
       isUser: isUser,
+      isLoading: isLoading,
       login: handleLogin,
       register: handleRegister,
       logout: handleLogout,
@@ -280,6 +282,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }),
     [
       isUser,
+      isLoading,
       handleLogin,
       handleRegister,
       handleLogout,
@@ -289,7 +292,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       handleChangePassword,
     ],
   );
-  if (isLoading) return <Loading />;
 
   return (
     <AuthContext.Provider value={contextValue}>

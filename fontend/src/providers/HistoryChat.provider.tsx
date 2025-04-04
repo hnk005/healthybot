@@ -32,7 +32,7 @@ export const HistoryChatProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isUser } = useAuth();
+  const { isUser, isLoading } = useAuth();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string>("");
   const [isReset, setIsReset] = useState(true);
@@ -40,7 +40,7 @@ export const HistoryChatProvider = ({
   const { data, refetch } = useQuery({
     queryKey: ["chatHistory"],
     queryFn: async () => await getHistoryChat(100),
-    enabled: isUser,
+    enabled: isUser && !isLoading,
     retry: false,
   });
 

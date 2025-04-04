@@ -8,7 +8,6 @@ const { getRedis } = databaseService;
 const userService = {
   existsEmail: async (email: string) => {
     const user = await User.findOne({ email, isVerified: true });
-
     if (!user) {
       throw new APIError(
         "BAD_REQUEST",
