@@ -41,6 +41,8 @@ export const ChatBotProvider = ({
   const [listChat, setListChat] = useState<ChatMessage[]>([]);
   const [loadingResAt, setLoadingResAt] = useState<boolean>(false);
   const cancelTokenRef = useRef<CancelTokenSource | null>(null);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<any>(null);
 
   const {
     isLoading: isLoadingChat,
@@ -57,27 +59,35 @@ export const ChatBotProvider = ({
     retry: false,
   });
 
-  const { mutate, isError, isPaused, error, isPending } = useMutation({
+  const { mutate, isPaused, isPending } = useMutation({
     mutationFn: async (userInput: string) => {
       setLoadingResAt(true);
       cancelTokenRef.current = axios.CancelToken.source();
       let assistant = "";
 
-      await chatWithAIStream(
-        userInput,
-        (chunk) => {
-          setLoadingResAt(false);
-          assistant += chunk;
-          setListChat((prev) => {
-            const updatedHistory = [...prev];
-            updatedHistory[updatedHistory.length - 1].assistant = assistant;
-            return [...updatedHistory];
-          });
-        },
-        cancelTokenRef.current.token,
-      );
-      setLoadingResAt(false);
-      if (isUser) handleChatComplete();
+      try {
+        setError(null);
+        setIsError(false);
+        await chatWithAIStream(
+          userInput,
+          (chunk) => {
+            setLoadingResAt(false);
+            assistant += chunk;
+            setListChat((prev) => {
+              const updatedHistory = [...prev];
+              updatedHistory[updatedHistory.length - 1].assistant = assistant;
+              return [...updatedHistory];
+            });
+          },
+          cancelTokenRef.current.token,
+        );
+      } catch (error) {
+        setIsError(true);
+        setError(error);
+      } finally {
+        setLoadingResAt(false);
+        if (isUser) handleChatComplete();
+      }
     },
   });
 
@@ -127,12 +137,6 @@ export const ChatBotProvider = ({
       stopChat();
     };
   }, [currentChatId, refetch]);
-
-  useEffect(() => {
-    if (isError) {
-      setLoadingResAt(false);
-    }
-  }, [isError, error]);
 
   return (
     <ChatContext.Provider
