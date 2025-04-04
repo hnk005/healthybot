@@ -35,6 +35,7 @@ export const HistoryChatProvider = ({
   const { isUser } = useAuth();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string>("");
+  const [isReset, setIsReset] = useState(true);
 
   const { data, refetch } = useQuery({
     queryKey: ["chatHistory"],
@@ -47,15 +48,16 @@ export const HistoryChatProvider = ({
     setCurrentChatId(chatId);
   };
 
-  const fetchHistory = useCallback(() => {
-    refetch();
+  const fetchHistory = useCallback(async () => {
+    await refetch();
   }, [refetch]);
 
   const handleNewChat = useCallback(async () => {
     try {
       await createChat();
-      fetchHistory();
+      await fetchHistory();
       setCurrentChatId("");
+      setIsReset(true);
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +66,8 @@ export const HistoryChatProvider = ({
   const hadnleChangeTitle = async (chatId: string, newTitle: string) => {
     try {
       await changeTitle(chatId, newTitle);
-      await refetch();
+      await fetchHistory();
+      setIsReset(false);
     } catch (error) {
       console.error(error);
     }
@@ -73,7 +76,8 @@ export const HistoryChatProvider = ({
   const hadnleDeleteChat = async (chatId: string) => {
     try {
       await deleteChat(chatId);
-      await refetch();
+      await fetchHistory();
+      setIsReset(true);
     } catch (error) {
       console.error(error);
     }
@@ -90,10 +94,10 @@ export const HistoryChatProvider = ({
   }, [data, handleNewChat]);
 
   useEffect(() => {
-    if (history.length > 0) {
+    if (history.length > 0 && isReset) {
       setCurrentChatId(history[0]._id);
     }
-  }, [history]);
+  }, [history, isReset]);
 
   return (
     <HistoryChatContext.Provider
