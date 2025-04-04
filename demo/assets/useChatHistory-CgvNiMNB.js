@@ -1,1 +1,0 @@
-import{r as o,a7 as s}from"./index-BIhGhohz.js";const e="/healthybot/assets/logo-X5r45KDl.png",a=()=>{const t=o.useContext(s);if(!t)throw new Error("useHistoryChat must be used within HistoryChatProvider");return t};export{e as l,a as u};
