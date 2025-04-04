@@ -13,7 +13,7 @@ const Chat = () => {
   }
 
   return (
-    <div className='w-full flex-1 overflow-y-auto'>
+    <div className='w-full flex-1 max-h-[768px] overflow-y-auto'>
       <div className='min-w-[768px] max-md:min-w-full flex justify-center'>
         <div className='flex flex-col w-full max-w-2xl space-y-3 mb-4 '>
           {listChat.map((chat, index) => (

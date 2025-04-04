@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useHistoryChat } from "@/hooks/useChatHistory";
 import { useAuth } from "@/hooks/useAuth";
 import { createSectionChat, getMessage } from "@/api/chat/history";
+import Spinnner from "@/components/base/Spinner";
 
 interface ChatMessage {
   user: string;
@@ -41,7 +42,7 @@ export const ChatBotProvider = ({
   const [loadingResAt, setLoadingResAt] = useState<boolean>(false);
   const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
-  const { refetch } = useQuery({
+  const { isLoading, isRefetching, refetch } = useQuery({
     queryKey: ["listChat"],
     queryFn: async () => {
       const { data } = await getMessage(currentChatId);
@@ -128,6 +129,10 @@ export const ChatBotProvider = ({
       setLoadingResAt(false);
     }
   }, [isError, error]);
+
+  if (isLoading || isRefetching) {
+    return <Spinnner />;
+  }
 
   return (
     <ChatContext.Provider
