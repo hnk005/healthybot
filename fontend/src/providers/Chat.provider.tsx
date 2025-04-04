@@ -42,7 +42,11 @@ export const ChatBotProvider = ({
   const [loadingResAt, setLoadingResAt] = useState<boolean>(false);
   const cancelTokenRef = useRef<CancelTokenSource | null>(null);
 
-  const { isLoading, isRefetching, refetch } = useQuery({
+  const {
+    isLoading: isLoadingChat,
+    isRefetching,
+    refetch,
+  } = useQuery({
     queryKey: ["listChat"],
     queryFn: async () => {
       const { data } = await getMessage(currentChatId);
@@ -73,7 +77,7 @@ export const ChatBotProvider = ({
         cancelTokenRef.current.token,
       );
       setLoadingResAt(false);
-      handleChatComplete();
+      if (isUser) handleChatComplete();
     },
   });
 
@@ -130,10 +134,6 @@ export const ChatBotProvider = ({
     }
   }, [isError, error]);
 
-  if (isLoading || isRefetching) {
-    return <Spinnner />;
-  }
-
   return (
     <ChatContext.Provider
       value={{
@@ -149,7 +149,7 @@ export const ChatBotProvider = ({
         stopChat,
       }}
     >
-      {children}
+      {isLoadingChat || isRefetching ? <Spinnner /> : children}
     </ChatContext.Provider>
   );
 };
