@@ -41,7 +41,7 @@ const authController = {
           "Đăng ký thành công, vui lòng nhập mã OTP để xác nhận tài khoản",
       });
 
-      next();
+      // next();
     } catch (error) {
       next(error);
     }

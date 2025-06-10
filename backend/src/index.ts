@@ -12,7 +12,7 @@ import { mongodb, redis } from "./config/connectDB";
 
 class App {
   public readonly corsOptions: CorsOptions = {
-    origin: ["https://hnk005.github.io", "http://localhost:3000"],
+    origin: ["https://hnk005.github.io", "http://localhost:5173"],
     credentials: true,
   };
 
